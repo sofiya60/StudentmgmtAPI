@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <button onclick="switchView('students')">Students</button>
+        <button onclick="switchView('courses')">Courses</button>
+        <button onclick="switchView('enrollments')">Enrollments</button>
+    </div>
+
+    <div class="content">
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <div id="error-message" class="error" style="display: none;"></div>
+        <div id="success-message" class="success" style="display: none;"></div>
+
+        <!-- Students Section -->
+        <div class="section" id="students">
+            <div class="container">
+                <h2>Students Management</h2>
+                <div class="form-container">
+                    <h3><span id="student-form-title">Add New Student</span></h3>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="s_id">Student ID</label>
+                            <input id="s_id" type="number" min="1" placeholder="Enter student ID">
+                        </div>
+                        <div class="input-group">
+                            <label for="s_first">First Name</label>
+                            <input id="s_first" placeholder="Enter first name">
+                        </div>
+                        <div class="input-group">
+                            <label for="s_last">Last Name</label>
+                            <input id="s_last" placeholder="Enter last name">
+                        </div>
+                        <div class="input-group">
+                            <label for="s_email">Email</label>
+                            <input id="s_email" type="email" placeholder="Enter email">
+                        </div>
+                        <div class="input-group">
+                            <label for="s_dob">Date of Birth</label>
+                            <input id="s_dob" type="date">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="action primary" onclick="saveStudent()" id="save-student-btn">
+                            <span id="student-btn-text">Add Student</span>
+                        </button>
+                        <button class="action secondary" onclick="clearStudentForm()">Clear Form</button>
+                        <button class="action cancel" onclick="cancelEditStudent()" id="cancel-edit-btn" style="display: none;">
+                            Cancel Edit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-container">
+                    <div class="header-row">
+                        <h3>All Students</h3>
+                        <button class="action refresh" onclick="loadStudents()">⟳ Refresh</button>
+                    </div>
+                    <div id="students-loading" class="loading-small" style="display: none;">
+                        <div class="mini-spinner"></div> Loading students...
+                    </div>
+                    <div id="no-students" class="empty-state" style="display: none;">
+                        <p>No students found. Add your first student!</p>
+                    </div>
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>DOB</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Section -->
+        <div class="section" id="courses" style="display:none;">
+            <div class="container">
+                <h2>Courses Management</h2>
+                <div class="form-container">
+                    <h3><span id="course-form-title">Add New Course</span></h3>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="c_id">Course ID</label>
+                            <input id="c_id" type="number" min="1" placeholder="Enter course ID">
+                        </div>
+                        <div class="input-group">
+                            <label for="c_name">Course Name</label>
+                            <input id="c_name" placeholder="Enter course name">
+                        </div>
+                        <div class="input-group">
+                            <label for="c_desc">Description</label>
+                            <textarea id="c_desc" placeholder="Enter course description"></textarea>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="action primary" onclick="saveCourse()" id="save-course-btn">
+                            <span id="course-btn-text">Add Course</span>
+                        </button>
+                        <button class="action secondary" onclick="clearCourseForm()">Clear Form</button>
+                        <button class="action cancel" onclick="cancelEditCourse()" id="cancel-edit-course-btn" style="display:none;">Cancel Edit</button>
+                    </div>
+                </div>
+
+                <div class="data-container">
+                    <div class="header-row">
+                        <h3>All Courses</h3>
+                        <button class="action refresh" onclick="loadCourses()">⟳ Refresh</button>
+                    </div>
+                    <div id="courses-loading" class="loading-small" style="display:none;">
+                        <div class="mini-spinner"></div> Loading courses...
+                    </div>
+                    <div id="no-courses" class="empty-state" style="display:none;">
+                        <p>No courses found. Add your first course!</p>
+                    </div>
+                    <table id="courseTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrollments Section -->
+        <div class="section" id="enrollments" style="display:none;">
+            <div class="container">
+                <h2>Enrollments Management</h2>
+                <div class="form-container">
+                    <h3><span id="enrollment-form-title">Add New Enrollment</span></h3>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="e_id">Enrollment ID</label>
+                            <input id="e_id" type="number" min="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="e_student">Student</label>
+                            <select id="e_student"></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="e_course">Course</label>
+                            <select id="e_course"></select>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="action primary" onclick="saveEnrollment()" id="save-enrollment-btn">
+                            <span id="enrollment-btn-text">Add Enrollment</span>
+                        </button>
+                        <button class="action secondary" onclick="clearEnrollmentForm()">Clear Form</button>
+                        <button class="action cancel" onclick="cancelEditEnrollment()" id="cancel-edit-enrollment-btn" style="display:none;">Cancel Edit</button>
+                    </div>
+                </div>
+
+                <div class="data-container">
+                    <div class="header-row">
+                        <h3>Student Enrollments</h3>
+                        <select id="e_view_student" onchange="loadEnrollments()">
+                            <option value="">Select student</option>
+                        </select>
+                    </div>
+                    <div id="enrollments-loading" class="loading-small" style="display:none;">
+                        <div class="mini-spinner"></div> Loading enrollments...
+                    </div>
+                    <div id="no-enrollments" class="empty-state" style="display:none;">
+                        <p>No enrollments found.</p>
+                    </div>
+                    <table id="enrollTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

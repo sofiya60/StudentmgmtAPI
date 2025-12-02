@@ -1,0 +1,6 @@
+wwwroot\index.html
+wwwroot\script.js
+wwwroot\style.css
+C:\Users\sofiy\source\repos\StudentmgmtAPI\StudentmgmtAPI\wwwroot\index.html
+C:\Users\sofiy\source\repos\StudentmgmtAPI\StudentmgmtAPI\wwwroot\script.js
+C:\Users\sofiy\source\repos\StudentmgmtAPI\StudentmgmtAPI\wwwroot\style.css
